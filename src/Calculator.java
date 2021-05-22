@@ -101,4 +101,15 @@ public class Calculator {
 
         return hashValues;
     }
+
+    public static void main(String[] args) throws IllegalArgumentException{
+        StringBuilder build = new StringBuilder();
+        for (int i=0;i< args.length;i++){
+            if (i!=0){
+                build.append(" ");
+            }
+            build.append(args[i]);
+        }
+        System.out.println(calc(build.toString()));
+    }
 }
