@@ -1,7 +1,4 @@
-import jdk.jfr.Unsigned;
-
 import java.nio.charset.StandardCharsets;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +24,7 @@ public class Calculator {
         }
         long inputLength = bytes.size() * 8;
         //append '10000000' byte
-        bytes.add(new Byte((byte) -128));
+        bytes.add((byte) -128);
         while ((bytes.size() + 8) % 64 != 0) {
             bytes.add((byte) 0);
         }
@@ -110,6 +107,8 @@ public class Calculator {
             }
             build.append(args[i]);
         }
+        System.out.println();
         System.out.println(calc(build.toString()));
+        System.out.println();
     }
 }
