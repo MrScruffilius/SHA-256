@@ -1,7 +1,9 @@
 import jdk.jfr.Unsigned;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Calculator {
@@ -39,9 +41,9 @@ public class Calculator {
 
         int[] output = HASH_VALUES.clone();
         int[] workingWith = bytes.stream().mapToInt(x -> Byte.toUnsignedInt(x)).toArray();
-        int[] manipulated;
+        int[] manipulated= new int[8];
         for (int i = 0; i < (workingWith.length * 8) / 512; i++) {
-            manipulated = loops(workingWith);
+            manipulated = loops(Arrays.copyOfRange(workingWith,i*64,(i+1)*64));
 
 
             for (int k = 0; k < 8; k++) {
@@ -57,9 +59,10 @@ public class Calculator {
         return ret.toString().toUpperCase();
     }
 
-    private static int[] loops(int[] bytes) {
+    private static int[] loops(int[] bytes){
         if (bytes.length != 64)
             return null;
+
 
         //vorbereitung der 64 double words
 
