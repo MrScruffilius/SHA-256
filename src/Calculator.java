@@ -39,9 +39,10 @@ public class Calculator {
         }
 
         int[] output=HASH_VALUES.clone();
-
+        //int[] workingWith=bytes.stream().map(x->x.byteValue()).toArray();
+        //int[] manipulated=new int[8];
         for (int i=0;i< (bytes.size()*8)/512;i++){
-
+            //manipulated=loops()
         }
 
 
@@ -93,7 +94,13 @@ public class Calculator {
         return hashValues;
     }
 
+    public static void main(String[] args) {
+        List<Integer> one=new ArrayList<>();
+        one.add(1);
+        one.add(2);
+        int[] n=one.stream().mapToInt(x->x).toArray();
 
+    }
 
 }
 
