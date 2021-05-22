@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BinaryOperator;
 
 
 public class Calculator {
@@ -17,7 +18,7 @@ public class Calculator {
             0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
             0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
 
-    private static int calc(String input){
+    private static String calc(String input){
         byte[] temp = input.getBytes(StandardCharsets.UTF_8);
 
         List<Byte> bytes = new ArrayList<>();
@@ -32,24 +33,48 @@ public class Calculator {
             bytes.add((byte) 0);
         }
 
+
+
         //adds the size of the input as bits as an 64 integer
-        for (int i=56;i>0;i-=8){
+        for (int i=56;i>=0;i-=8){
             Long l=inputLength >>i;
             bytes.add(l.byteValue());
         }
 
+
         int[] output=HASH_VALUES.clone();
-        //int[] workingWith=bytes.stream().map(x->x.byteValue()).toArray();
-        //int[] manipulated=new int[8];
-        for (int i=0;i< (bytes.size()*8)/512;i++){
-            //manipulated=loops()
+        int[] workingWith=bytes.stream().mapToInt(x->Byte.toUnsignedInt(x)).toArray();
+        //workingWith[(int) (inputLength/8)+1]= Byte.toUnsignedInt((byte) -128);
+
+
+        int[] manipulated=new int[8];
+        for (int i=0;i< (workingWith.length*8)/512;i++){
+            manipulated=loops(workingWith);
+
+
+
+            for (int k=0;k<8;k++){
+                output[k]+=manipulated[k];
+            }
+        }
+        StringBuilder ret = new StringBuilder();
+
+        for (int k=0;k<8;k++){
+            ret.append(Integer.toHexString(output[k]));
         }
 
 
-        return 0;
+        return ret.toString();
     }
 
-    private static int[] loops(byte[] bytes){
+
+
+
+
+
+
+
+    private static int[] loops(int[] bytes){
         if (bytes.length!=64)
             return null;
 
@@ -60,7 +85,7 @@ public class Calculator {
         int[] constantValues= CONSTANT_VALUES.clone();
         int counter=0;
         for (int i=0;i< bytes.length;i+=4){
-            int additional = (Byte.toUnsignedInt(bytes[i])<<24)|(Byte.toUnsignedInt(bytes[i+1])<<16)|(Byte.toUnsignedInt(bytes[i+2])<<8)|(Byte.toUnsignedInt(bytes[i+3]));
+            int additional = (bytes[i]<<24)|(bytes[i+1]<<16)|(bytes[i+2]<<8)|(bytes[i+3]);
             dWords[counter]=additional;
             counter++;
         }
@@ -72,6 +97,7 @@ public class Calculator {
         for (int i = 16; i < 64; i++) {
             dWords[i]= dWords[i-16]+ ((dWords[i-15]>>>7)^(dWords[i-15]<<25))^((dWords[i-15]>>>18)^(dWords[i-15]<<14))^(dWords[i-15] >>> 3)+dWords[i-7]+ ((dWords[i-2]>>>17)^(dWords[i-2]<<15))^((dWords[i-2]>>>19)^(dWords[i-2]<<13))^(dWords[i- 2] >>> 10);
         }
+
 
         //bereit für compression loop
         for (int i = 0; i < 64; i++) {
@@ -94,11 +120,8 @@ public class Calculator {
         return hashValues;
     }
 
-    public static void main(String[] args) {
-        List<Integer> one=new ArrayList<>();
-        one.add(1);
-        one.add(2);
-        int[] n=one.stream().mapToInt(x->x).toArray();
+    public static void main(String[] args){
+        System.out.println(calc("hello world"));
 
     }
 
