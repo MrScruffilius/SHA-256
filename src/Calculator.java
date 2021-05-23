@@ -39,9 +39,9 @@ public class Calculator {
 
         int[] output = HASH_VALUES.clone();
         int[] workingWith = bytes.stream().mapToInt(x -> Byte.toUnsignedInt(x)).toArray();
-        int[] manipulated= new int[8];
+        int[] manipulated = new int[8];
         for (int i = 0; i < (workingWith.length * 8) / 512; i++) {
-            manipulated = loops(Arrays.copyOfRange(workingWith,i*64,(i+1)*64));
+            manipulated = loops(Arrays.copyOfRange(workingWith, i * 64, (i + 1) * 64));
 
 
             for (int k = 0; k < 8; k++) {
@@ -57,7 +57,7 @@ public class Calculator {
         return ret.toString().toUpperCase();
     }
 
-    private static int[] loops(int[] bytes){
+    private static int[] loops(int[] bytes) {
         if (bytes.length != 64)
             return null;
 
@@ -97,10 +97,10 @@ public class Calculator {
         return hashValues;
     }
 
-    public static void main(String[] args) throws IllegalArgumentException{
+    public static void main(String[] args) throws IllegalArgumentException {
         StringBuilder build = new StringBuilder();
-        for (int i=0;i< args.length;i++){
-            if (i!=0){
+        for (int i = 0; i < args.length; i++) {
+            if (i != 0) {
                 build.append(" ");
             }
             build.append(args[i]);
