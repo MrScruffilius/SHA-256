@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Calculator {
+    //HARD CODED HASH VALUES AND CONSTANT VALUES
     private final static int[] HASH_VALUES = {0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
     private final static int[] CONSTANT_VALUES = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
             0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -29,7 +30,7 @@ public class Calculator {
             bytes.add((byte) 0);
         }
 
-        //adds the size of the input as bits as an 64 integer
+        //adds the size of the input as bits as an 64 bit-number
         for (int i = 56; i >= 0; i -= 8) {
             Long l = inputLength >> i;
             bytes.add(l.byteValue());
@@ -60,9 +61,6 @@ public class Calculator {
         if (bytes.length != 64)
             return null;
 
-
-        //vorbereitung der 64 double words
-
         int[] dWords = new int[64];
         int[] hashValues = HASH_VALUES.clone();
         int[] constantValues = CONSTANT_VALUES.clone();
@@ -82,7 +80,7 @@ public class Calculator {
 
         //COMPRESSION LOOP
         for (int i = 0; i < 64; i++) {
-            //temporäre Variablen
+            //temporary variables
             int temp1 = hashValues[7] + (((hashValues[4] >>> 6) ^ (hashValues[4] << 26)) ^ ((hashValues[4] >>> 11) ^ (hashValues[4] << 21)) ^ ((hashValues[4] >>> 25) ^ (hashValues[4] << 7))) + ((hashValues[4] & hashValues[5]) ^ ((~hashValues[4]) & hashValues[6])) + constantValues[i] + dWords[i];
             int temp2 = (((hashValues[0] >>> 2) ^ (hashValues[0] << 30)) ^ ((hashValues[0] >>> 13) ^ (hashValues[0] << 19)) ^ ((hashValues[0] >>> 22) ^ (hashValues[0] << 10))) + ((hashValues[0] & hashValues[1]) ^ (hashValues[0] & hashValues[2]) ^ (hashValues[1] & hashValues[2]));
 
@@ -107,8 +105,6 @@ public class Calculator {
             }
             build.append(args[i]);
         }
-        System.out.println();
         System.out.println(calc(build.toString()));
-        System.out.println();
     }
 }
